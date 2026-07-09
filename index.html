@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>간단 사주 풀이</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Noto Sans KR', Arial, sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      color: #222;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #3b2f63;
+    }
+
+    .desc {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 8px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 25px;
+      border: none;
+      background: #5b4b9b;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #463878;
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 15px;
+      background: #f5f3ff;
+      display: none;
+      line-height: 1.7;
+    }
+
+    .result h2 {
+      margin-top: 0;
+      color: #3b2f63;
+    }
+
+    .note {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>간단 사주 풀이</h1>
+    <p class="desc">생년월일과 태어난 시간을 입력하면 간단한 성향 풀이를 보여드립니다.</p>
+
+    <label>생년월일</label>
+    <input type="date" id="birthDate" />
+
+    <label>성별</label>
+    <select id="gender">
+      <option value="">선택하세요</option>
+      <option value="남성">남성</option>
+      <option value="여성">여성</option>
+      <option value="기타">기타</option>
+    </select>
+
+    <label>태어난 시간</label>
+    <input type="time" id="birthTime" />
+
+    <button onclick="showSaju()">사주 풀이 보기</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function showSaju() {
+      const birthDate = document.getElementById('birthDate').value;
+      const gender = document.getElementById('gender').value;
+      const birthTime = document.getElementById('birthTime').value;
+      const result = document.getElementById('result');
+
+      if (!birthDate || !gender || !birthTime) {
+        alert('생년월일, 성별, 태어난 시간을 모두 입력해주세요.');
+        return;
+      }
+
+      const date = new Date(birthDate);
+      const month = date.getMonth() + 1;
+      const hour = Number(birthTime.split(':')[0]);
+
+      const elements = ['목(木)', '화(火)', '토(土)', '금(金)', '수(水)'];
+      const element = elements[(month + hour) % elements.length];
+
+      let personality = '';
+      if (element === '목(木)') {
+        personality = '성장 욕구가 강하고 새로운 일을 시작하는 힘이 좋은 타입입니다.';
+      } else if (element === '화(火)') {
+        personality = '표현력이 좋고 주변 분위기를 밝게 만드는 에너지가 강한 타입입니다.';
+      } else if (element === '토(土)') {
+        personality = '신중하고 책임감이 있으며 안정적인 관계를 중요하게 여기는 타입입니다.';
+      } else if (element === '금(金)') {
+        personality = '원칙과 기준이 분명하고 판단력이 좋은 타입입니다.';
+      } else {
+        personality = '감수성이 풍부하고 생각이 깊으며 상황을 유연하게 보는 타입입니다.';
+      }
+
+      let timeEnergy = '';
+      if (hour >= 5 && hour < 11) {
+        timeEnergy = '아침 기운이 강해 계획성과 추진력이 잘 드러납니다.';
+      } else if (hour >= 11 && hour < 17) {
+        timeEnergy = '낮의 기운이 강해 활동적이고 사람들과 어울리는 힘이 좋습니다.';
+      } else if (hour >= 17 && hour < 23) {
+        timeEnergy = '저녁 기운이 강해 감정의 깊이와 집중력이 돋보입니다.';
+      } else {
+        timeEnergy = '밤의 기운이 강해 직감과 내면의 생각이 풍부한 편입니다.';
+      }
+
+      result.style.display = 'block';
+      result.innerHTML = `
+        <h2>풀이 결과</h2>
+        <p><strong>기본 기운:</strong> ${element}</p>
+        <p>${personality}</p>
+        <p>${timeEnergy}</p>
+        <p><strong>${gender}</strong> 기준으로 볼 때, 자신만의 속도를 지키면서 꾸준히 움직일 때 운의 흐름이 좋아지는 편입니다.</p>
+        <p class="note">※ 이 결과는 재미로 보는 간단한 풀이이며, 실제 사주 명리학 해석과는 차이가 있을 수 있습니다.</p>
+      `;
+    }
+  </script>
+</body>
+</html>
